@@ -1,0 +1,439 @@
+[tuukkala:...alvelinohjelmointi/ratebeer]$ rails c
+Loading development environment (Rails 7.0.3.1)
+[1] pry(main)> Beer.first
+   (0.4ms)  SELECT sqlite_version(*)
+  Beer Load (0.1ms)  SELECT "beers".* FROM "beers" ORDER BY "beers"."id" ASC LIMIT ?  [["LIMIT", 1]]
+=> #<Beer:0x00007f7fd0f94488
+ id: 1,
+ name: "Iso 3",
+ style: "Lager",
+ brewery_id: 1,
+ created_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00,
+ updated_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00>
+[2] pry(main)> eka = Beer.first
+  Beer Load (0.3ms)  SELECT "beers".* FROM "beers" ORDER BY "beers"."id" ASC LIMIT ?  [["LIMIT", 1]]
+=> #<Beer:0x00007f7fcfb07dd0
+ id: 1,
+ name: "Iso 3",
+ style: "Lager",
+ brewery_id: 1,
+ created_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00,
+ updated_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00>
+[3] pry(main)> eka.ratings
+  Rating Load (0.2ms)  SELECT "ratings".* FROM "ratings" WHERE "ratings"."beer_id" = ?  [["beer_id", 1]]
+=> []
+[4] pry(main)> eka.ratings.create score: 10
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.5ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 10], ["beer_id", 1], ["created_at", "2022-08-13 20:26:55.321707"], ["updated_at", "2022-08-13 20:26:55.321707"]]
+  TRANSACTION (11.9ms)  commit transaction
+=> #<Rating:0x00007f7fcf9a4740
+ id: 1,
+ score: 10,
+ beer_id: 1,
+ created_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00>
+[5] pry(main)> eka.ratings.all
+  Rating Load (0.3ms)  SELECT "ratings".* FROM "ratings" WHERE "ratings"."beer_id" = ?  [["beer_id", 1]]
+=> [#<Rating:0x00007f7fcf8540c0
+  id: 1,
+  score: 10,
+  beer_id: 1,
+  created_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00>]
+[6] pry(main)> eka.ratings.sum
+  Rating Sum (0.4ms)  SELECT SUM() FROM "ratings" WHERE "ratings"."beer_id" = ?  [["beer_id", 1]]
+ActiveRecord::StatementInvalid: SQLite3::SQLException: wrong number of arguments to function SUM()
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/sqlite3-1.4.4/lib/sqlite3/database.rb:152:in `initialize'
+Caused by SQLite3::SQLException: wrong number of arguments to function SUM()
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/sqlite3-1.4.4/lib/sqlite3/database.rb:152:in `initialize'
+[7] pry(main)> eka.ratings.score.sum
+NoMethodError: undefined method `score' for #<ActiveRecord::Associations::CollectionProxy [#<Rating id: 1, score: 10, beer_id: 1, created_at: "2022-08-13 20:26:55.321707000 +0000", updated_at: "2022-08-13 20:26:55.321707000 +0000">]>
+Did you mean?  scope
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activerecord-7.0.3.1/lib/active_record/relation/delegation.rb:110:in `method_missing'
+[8] pry(main)> eka.ratings
+=> [#<Rating:0x00007f7fcf9a4740
+  id: 1,
+  score: 10,
+  beer_id: 1,
+  created_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00>]
+[9] pry(main)> eka.ratings.create score: 11
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.7ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 11], ["beer_id", 1], ["created_at", "2022-08-13 20:27:36.884314"], ["updated_at", "2022-08-13 20:27:36.884314"]]
+  TRANSACTION (3.2ms)  commit transaction
+=> #<Rating:0x00007f7fcf2df068
+ id: 2,
+ score: 11,
+ beer_id: 1,
+ created_at: Sat, 13 Aug 2022 20:27:36.884314000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:27:36.884314000 UTC +00:00>
+[10] pry(main)> uusi_olut = Beer.create name:"Anon", style:"IPA"
+=> #<Beer:0x00007f7fcf2b7018 id: nil, name: "Anon", style: "IPA", brewery_id: nil, created_at: nil, updated_at: nil>
+[11] pry(main)> b.errors
+NameError: undefined local variable or method `b' for main:Object
+
+b.errors
+^
+from (pry):11:in `__pry__'
+[12] pry(main)> uusi_olut.errors
+=> #<ActiveModel::Errors [#<ActiveModel::Error attribute=brewery, type=blank, options={:message=>:required}>]>
+[13] pry(main)> uusi_olut.brewery = "Koff"
+ActiveRecord::AssociationTypeMismatch: Brewery(#13900) expected, got "Koff" which is an instance of String(#2380)
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activerecord-7.0.3.1/lib/active_record/associations/association.rb:299:in `raise_on_type_mismatch!'
+[14] pry(main)> uusi_olut.brewery = 1
+ActiveRecord::AssociationTypeMismatch: Brewery(#13900) expected, got 1 which is an instance of Integer(#2340)
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activerecord-7.0.3.1/lib/active_record/associations/association.rb:299:in `raise_on_type_mismatch!'
+[15] pry(main)> uusi_olut.brewery = Brewery.first
+  Brewery Load (0.2ms)  SELECT "breweries".* FROM "breweries" ORDER BY "breweries"."id" ASC LIMIT ?  [["LIMIT", 1]]
+=> #<Brewery:0x00007f7fcf1efc70
+ id: 1,
+ name: "Koff",
+ year: 1897,
+ created_at: Fri, 12 Aug 2022 15:36:13.333849000 UTC +00:00,
+ updated_at: Fri, 12 Aug 2022 15:36:13.333849000 UTC +00:00>
+[16] pry(main)> uusi_olut
+=> #<Beer:0x00007f7fcf2b7018 id: nil, name: "Anon", style: "IPA", brewery_id: 1, created_at: nil, updated_at: nil>
+[17] pry(main)> uusi_olut.save
+  TRANSACTION (0.2ms)  begin transaction
+  Beer Create (0.6ms)  INSERT INTO "beers" ("name", "style", "brewery_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)  [["name", "Anon"], ["style", "IPA"], ["brewery_id", 1], ["created_at", "2022-08-13 20:30:25.925615"], ["updated_at", "2022-08-13 20:30:25.925615"]]
+  TRANSACTION (13.1ms)  commit transaction
+=> true
+[18] pry(main)> Brewery.all
+  Brewery Load (0.4ms)  SELECT "breweries".* FROM "breweries"
+=> [#<Brewery:0x00007f7fcf184d80
+  id: 1,
+  name: "Koff",
+  year: 1897,
+  created_at: Fri, 12 Aug 2022 15:36:13.333849000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.333849000 UTC +00:00>,
+ #<Brewery:0x00007f7fcf184cb8
+  id: 2,
+  name: "Malmgard",
+  year: 2001,
+  created_at: Fri, 12 Aug 2022 15:36:13.338175000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.338175000 UTC +00:00>,
+ #<Brewery:0x00007f7fcf184bf0
+  id: 3,
+  name: "Weihenstephaner",
+  year: 1040,
+  created_at: Fri, 12 Aug 2022 15:36:13.342186000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.342186000 UTC +00:00>]
+[19] pry(main)> Beer.all
+  Beer Load (0.5ms)  SELECT "beers".* FROM "beers"
+=> [#<Beer:0x00007f7fcf13b270
+  id: 1,
+  name: "Iso 3",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13b1a8
+  id: 2,
+  name: "Karhu",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.358946000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.358946000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13b0e0
+  id: 3,
+  name: "Tuplahumala",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.363572000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.363572000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13b018
+  id: 4,
+  name: "Huvila Pale Ale",
+  style: "Pale Ale",
+  brewery_id: 2,
+  created_at: Fri, 12 Aug 2022 15:36:13.367613000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.367613000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13af50
+  id: 5,
+  name: "X Porter",
+  style: "Porter",
+  brewery_id: 2,
+  created_at: Fri, 12 Aug 2022 15:36:13.372258000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.372258000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13ae88
+  id: 6,
+  name: "Hefeweizen",
+  style: "Weizen",
+  brewery_id: 3,
+  created_at: Fri, 12 Aug 2022 15:36:13.377244000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.377244000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13adc0
+  id: 7,
+  name: "Helles",
+  style: "Lager",
+  brewery_id: 3,
+  created_at: Fri, 12 Aug 2022 15:36:13.381587000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.381587000 UTC +00:00>,
+ #<Beer:0x00007f7fcf13acf8
+  id: 11,
+  name: "Anon",
+  style: "IPA",
+  brewery_id: 1,
+  created_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00>]
+[20] pry(main)> uusi_olut
+=> #<Beer:0x00007f7fcf2b7018
+ id: 11,
+ name: "Anon",
+ style: "IPA",
+ brewery_id: 1,
+ created_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00>
+[21] pry(main)> uusi_olut.destroy
+  TRANSACTION (0.2ms)  begin transaction
+  Beer Destroy (0.6ms)  DELETE FROM "beers" WHERE "beers"."id" = ?  [["id", 11]]
+  TRANSACTION (12.9ms)  commit transaction
+=> #<Beer:0x00007f7fcf2b7018
+ id: 11,
+ name: "Anon",
+ style: "IPA",
+ brewery_id: 1,
+ created_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:30:25.925615000 UTC +00:00>
+[22] pry(main)> Beer.all
+  Beer Load (0.1ms)  SELECT "beers".* FROM "beers"
+=> [#<Beer:0x00007f7fcf038c38
+  id: 1,
+  name: "Iso 3",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.353701000 UTC +00:00>,
+ #<Beer:0x00007f7fcf038b70
+  id: 2,
+  name: "Karhu",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.358946000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.358946000 UTC +00:00>,
+ #<Beer:0x00007f7fcf038aa8
+  id: 3,
+  name: "Tuplahumala",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Fri, 12 Aug 2022 15:36:13.363572000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.363572000 UTC +00:00>,
+ #<Beer:0x00007f7fcf0389e0
+  id: 4,
+  name: "Huvila Pale Ale",
+  style: "Pale Ale",
+  brewery_id: 2,
+  created_at: Fri, 12 Aug 2022 15:36:13.367613000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.367613000 UTC +00:00>,
+ #<Beer:0x00007f7fcf038918
+  id: 5,
+  name: "X Porter",
+  style: "Porter",
+  brewery_id: 2,
+  created_at: Fri, 12 Aug 2022 15:36:13.372258000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.372258000 UTC +00:00>,
+ #<Beer:0x00007f7fcf038850
+  id: 6,
+  name: "Hefeweizen",
+  style: "Weizen",
+  brewery_id: 3,
+  created_at: Fri, 12 Aug 2022 15:36:13.377244000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.377244000 UTC +00:00>,
+ #<Beer:0x00007f7fcf038788
+  id: 7,
+  name: "Helles",
+  style: "Lager",
+  brewery_id: 3,
+  created_at: Fri, 12 Aug 2022 15:36:13.381587000 UTC +00:00,
+  updated_at: Fri, 12 Aug 2022 15:36:13.381587000 UTC +00:00>]
+[23] pry(main)> Brewery
+=> Brewery(id: integer, name: string, year: integer, created_at: datetime, updated_at: datetime)
+[24] pry(main)> br = Brewery.create({name: "BrewDog", year: 2007})
+  TRANSACTION (0.2ms)  begin transaction
+  Brewery Create (0.6ms)  INSERT INTO "breweries" ("name", "year", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["name", "BrewDog"], ["year", 2007], ["created_at", "2022-08-13 20:38:31.115262"], ["updated_at", "2022-08-13 20:38:31.115262"]]
+  TRANSACTION (12.8ms)  commit transaction
+=> #<Brewery:0x00007f7fcef84ad0
+ id: 5,
+ name: "BrewDog",
+ year: 2007,
+ created_at: Sat, 13 Aug 2022 20:38:31.115262000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:38:31.115262000 UTC +00:00>
+[25] pry(main)> Beer
+=> Beer(id: integer, name: string, style: string, brewery_id: integer, created_at: datetime, updated_at: datetime)
+[26] pry(main)> Beer.create({name: "Punk IPA", style: "IPA", brewery_id: br.id},{name:"Nanny State", style:"lowalcohol", brewery_id: br.id})
+ArgumentError: wrong number of arguments (given 2, expected 0..1)
+from /home/tuukkala/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/activerecord-7.0.3.1/lib/active_record/persistence.rb:33:in `create'
+[27] pry(main)> Beer.create({name: "Punk IPA", style: "IPA", brewery_id: br.id})                                                            
+  TRANSACTION (0.2ms)  begin transaction
+  Brewery Load (0.4ms)  SELECT "breweries".* FROM "breweries" WHERE "breweries"."id" = ? LIMIT ?  [["id", 5], ["LIMIT", 1]]
+  Beer Create (0.2ms)  INSERT INTO "beers" ("name", "style", "brewery_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)  [["name", "Punk IPA"], ["style", "IPA"], ["brewery_id", 5], ["created_at", "2022-08-13 20:40:14.040617"], ["updated_at", "2022-08-13 20:40:14.040617"]]
+  TRANSACTION (11.5ms)  commit transaction
+=> #<Beer:0x00007f7fd065f0e8
+ id: 12,
+ name: "Punk IPA",
+ style: "IPA",
+ brewery_id: 5,
+ created_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00>
+[28] pry(main)> Beer.create({name:"Nanny State", style:"lowalcohol", brewery_id: br.id})                                                    
+  TRANSACTION (0.2ms)  begin transaction
+  Brewery Load (0.2ms)  SELECT "breweries".* FROM "breweries" WHERE "breweries"."id" = ? LIMIT ?  [["id", 5], ["LIMIT", 1]]
+  Beer Create (0.6ms)  INSERT INTO "beers" ("name", "style", "brewery_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)  [["name", "Nanny State"], ["style", "lowalcohol"], ["brewery_id", 5], ["created_at", "2022-08-13 20:40:23.398540"], ["updated_at", "2022-08-13 20:40:23.398540"]]
+  TRANSACTION (5.9ms)  commit transaction
+=> #<Beer:0x00007f7fcfaf9cd0
+ id: 13,
+ name: "Nanny State",
+ style: "lowalcohol",
+ brewery_id: 5,
+ created_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00>
+[29] pry(main)> br
+=> #<Brewery:0x00007f7fcef84ad0
+ id: 5,
+ name: "BrewDog",
+ year: 2007,
+ created_at: Sat, 13 Aug 2022 20:38:31.115262000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:38:31.115262000 UTC +00:00>
+[30] pry(main)> br.beers
+  Beer Load (0.2ms)  SELECT "beers".* FROM "beers" WHERE "beers"."brewery_id" = ?  [["brewery_id", 5]]
+=> [#<Beer:0x00007f7fcf9f8890
+  id: 12,
+  name: "Punk IPA",
+  style: "IPA",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00>,
+ #<Beer:0x00007f7fcf9f8458
+  id: 13,
+  name: "Nanny State",
+  style: "lowalcohol",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00>]
+[31] pry(main)> dogbeers = br.beers
+=> [#<Beer:0x00007f7fcf9f8890
+  id: 12,
+  name: "Punk IPA",
+  style: "IPA",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00>,
+ #<Beer:0x00007f7fcf9f8458
+  id: 13,
+  name: "Nanny State",
+  style: "lowalcohol",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00>]
+[32] pry(main)> dogbeers.each{|b| b.ratings.create({score:10})}
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 10], ["beer_id", 12], ["created_at", "2022-08-13 20:43:02.934730"], ["updated_at", "2022-08-13 20:43:02.934730"]]
+  TRANSACTION (11.8ms)  commit transaction
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.3ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 10], ["beer_id", 13], ["created_at", "2022-08-13 20:43:02.951002"], ["updated_at", "2022-08-13 20:43:02.951002"]]
+  TRANSACTION (2.2ms)  commit transaction
+=> [#<Beer:0x00007f7fcf9f8890
+  id: 12,
+  name: "Punk IPA",
+  style: "IPA",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00>,
+ #<Beer:0x00007f7fcf9f8458
+  id: 13,
+  name: "Nanny State",
+  style: "lowalcohol",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00>]
+[33] pry(main)> dogbeers.each{|b| b.ratings.create({score:14})}
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 14], ["beer_id", 12], ["created_at", "2022-08-13 20:43:15.022040"], ["updated_at", "2022-08-13 20:43:15.022040"]]
+  TRANSACTION (12.4ms)  commit transaction
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.3ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 14], ["beer_id", 13], ["created_at", "2022-08-13 20:43:15.038640"], ["updated_at", "2022-08-13 20:43:15.038640"]]
+  TRANSACTION (2.2ms)  commit transaction
+=> [#<Beer:0x00007f7fcf9f8890
+  id: 12,
+  name: "Punk IPA",
+  style: "IPA",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:14.040617000 UTC +00:00>,
+ #<Beer:0x00007f7fcf9f8458
+  id: 13,
+  name: "Nanny State",
+  style: "lowalcohol",
+  brewery_id: 5,
+  created_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:40:23.398540000 UTC +00:00>]
+[34] pry(main)> dogbeers.first.ratings.create score: 12
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 12], ["beer_id", 12], ["created_at", "2022-08-13 20:43:37.725848"], ["updated_at", "2022-08-13 20:43:37.725848"]]
+  TRANSACTION (12.8ms)  commit transaction
+=> #<Rating:0x00007f7fcf2de140
+ id: 7,
+ score: 12,
+ beer_id: 12,
+ created_at: Sat, 13 Aug 2022 20:43:37.725848000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:43:37.725848000 UTC +00:00>
+[35] pry(main)> dogbeers.last.ratings.create score: 13
+  TRANSACTION (0.2ms)  begin transaction
+  Rating Create (0.7ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["score", 13], ["beer_id", 13], ["created_at", "2022-08-13 20:43:45.695567"], ["updated_at", "2022-08-13 20:43:45.695567"]]
+  TRANSACTION (13.4ms)  commit transaction
+=> #<Rating:0x00007f7fcf2a6ba0
+ id: 8,
+ score: 13,
+ beer_id: 13,
+ created_at: Sat, 13 Aug 2022 20:43:45.695567000 UTC +00:00,
+ updated_at: Sat, 13 Aug 2022 20:43:45.695567000 UTC +00:00>
+[36] pry(main)> Rating.all
+  Rating Load (0.2ms)  SELECT "ratings".* FROM "ratings"
+=> [#<Rating:0x00007f7fcf266438
+  id: 1,
+  score: 10,
+  beer_id: 1,
+  created_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:26:55.321707000 UTC +00:00>,
+ #<Rating:0x00007f7fcf266370
+  id: 2,
+  score: 11,
+  beer_id: 1,
+  created_at: Sat, 13 Aug 2022 20:27:36.884314000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:27:36.884314000 UTC +00:00>,
+ #<Rating:0x00007f7fcf2662a8
+  id: 3,
+  score: 10,
+  beer_id: 12,
+  created_at: Sat, 13 Aug 2022 20:43:02.934730000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:02.934730000 UTC +00:00>,
+ #<Rating:0x00007f7fcf2661e0
+  id: 4,
+  score: 10,
+  beer_id: 13,
+  created_at: Sat, 13 Aug 2022 20:43:02.951002000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:02.951002000 UTC +00:00>,
+ #<Rating:0x00007f7fcf266118
+  id: 5,
+  score: 14,
+  beer_id: 12,
+  created_at: Sat, 13 Aug 2022 20:43:15.022040000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:15.022040000 UTC +00:00>,
+ #<Rating:0x00007f7fcf266050
+  id: 6,
+  score: 14,
+  beer_id: 13,
+  created_at: Sat, 13 Aug 2022 20:43:15.038640000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:15.038640000 UTC +00:00>,
+ #<Rating:0x00007f7fcf265f88
+  id: 7,
+  score: 12,
+  beer_id: 12,
+  created_at: Sat, 13 Aug 2022 20:43:37.725848000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:37.725848000 UTC +00:00>,
+ #<Rating:0x00007f7fcf265ec0
+  id: 8,
+  score: 13,
+  beer_id: 13,
+  created_at: Sat, 13 Aug 2022 20:43:45.695567000 UTC +00:00,
+  updated_at: Sat, 13 Aug 2022 20:43:45.695567000 UTC +00:00>]
