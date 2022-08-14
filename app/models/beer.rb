@@ -4,8 +4,7 @@ class Beer < ApplicationRecord
 
 	def average_rating
 		if !self.ratings.empty?
-			scores = self.ratings.pluck(:score)
-			scores.inject(:+).to_f/scores.length
+			self.ratings.average(:score)
 		end
 	end
 
