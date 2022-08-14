@@ -2,6 +2,14 @@
 
 <%= render @beer %>
 
+<p>
+<% if @beer.ratings.empty? %>
+  This beer has not been rated yet!
+<% else %>
+  Beer has <%= @beer.ratings.count %> ratings with an average of <%= @beer.average_rating %>
+<% end %>
+</p>
+
 <div>
   <%= link_to "Edit this beer", edit_beer_path(@beer) %> |
   <%= link_to "Back to beers", beers_path %>
