@@ -7,6 +7,15 @@ class RatingsController < ApplicationController
   def show
   end
 
+  def new
+    @rating = Rating.new
+  end
+
+  def create
+    Rating.create params.require(:rating).permit(:beer_id, :score)
+    redirect_to ratings_path
+  end
+
   private
     def set_rating
       @rating = Rating.find(params[:id])
