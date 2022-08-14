@@ -8,4 +8,8 @@ class Beer < ApplicationRecord
 		end
 	end
 
+	def to_s
+		self.name + ", " + self.brewery.name
+	end
+
 end
