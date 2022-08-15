@@ -2,7 +2,7 @@
 
 ratebeer is an application to rate beers, hence the name.
 
-The production version of the application is located in [https://radiant-mesa-46968.herokuapp.com/breweries](https://radiant-mesa-46968.herokuapp.com/breweries).
+The production version of the application is located in [https://radiant-mesa-46968.herokuapp.com/](https://radiant-mesa-46968.herokuapp.com/).
 
 ## Running the application
 
