@@ -1,8 +1,8 @@
 class RatingsController < ApplicationController
-  before_action :set_rating, only: %i[ show ]
-	def index
-		@ratings = Rating.all
-	end
+  before_action :set_rating, only: %i[show]
+  def index
+    @ratings = Rating.all
+  end
 
   def show
   end
@@ -24,7 +24,8 @@ class RatingsController < ApplicationController
   end
 
   private
-    def set_rating
-      @rating = Rating.find(params[:id])
-    end
+
+  def set_rating
+    @rating = Rating.find(params[:id])
+  end
 end

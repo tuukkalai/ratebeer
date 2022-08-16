@@ -1,6 +1,6 @@
 class BreweriesController < ApplicationController
-  before_action :set_brewery, only: %i[ show edit update destroy ]
-  before_action :authenticate, only: %i[ destroy ]
+  before_action :set_brewery, only: %i[show edit update destroy]
+  before_action :authenticate, only: %i[destroy]
 
   # GET /breweries or /breweries.json
   def index
@@ -59,22 +59,23 @@ class BreweriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_brewery
-      @brewery = Brewery.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def brewery_params
-      params.require(:brewery).permit(:name, :year)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_brewery
+    @brewery = Brewery.find(params[:id])
+  end
 
-    def authenticate
-      admin_accounts = { "pekka" => "beer", "arto" => "foobar", "matti" => "ittam", "vilma" => "kangas" }
-      authenticate_or_request_with_http_basic do |username, password|
-        raise RuntimeError.new("Invalid username or password") unless admin_accounts[username] == password
+  # Only allow a list of trusted parameters through.
+  def brewery_params
+    params.require(:brewery).permit(:name, :year)
+  end
 
-        return true
-      end
+  def authenticate
+    admin_accounts = { "pekka" => "beer", "arto" => "foobar", "matti" => "ittam", "vilma" => "kangas" }
+    authenticate_or_request_with_http_basic do |username, password|
+      raise "Invalid username or password" unless admin_accounts[username] == password
+
+      return true
     end
+  end
 end
