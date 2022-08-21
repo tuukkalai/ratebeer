@@ -3,5 +3,11 @@
     <strong>Username:</strong>
     <%= user.username %>
   </p>
-
+  <p><%= user.username %> has made <%= pluralize(user.ratings.count, "rating") %>, average rating <%= user.average_rating.round(2) %></p>
+  <h3>Ratings</h3>
+  <ul>
+  <% user.ratings.each do |rating| %>
+    <li><%= render rating %> <%= link_to "Delete", rating, data: {"turbo-method": :delete} %></li>
+  <% end %>
+  </ul>
 </div>
