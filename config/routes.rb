@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :beer_clubs
   resources :users
   resources :beers
   resources :breweries
@@ -17,4 +18,6 @@ Rails.application.routes.draw do
   get "signup", to: "users#new"
   get "signin", to: "sessions#new"
   delete "signout", to: "sessions#destroy"
+  resources :membership, only: [:new, :create, :destroy]
+  resources :beer_clubs, only: [:index, :new, :create, :destroy]
 end
