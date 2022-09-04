@@ -18,6 +18,6 @@ Rails.application.routes.draw do
   get "signup", to: "users#new"
   get "signin", to: "sessions#new"
   delete "signout", to: "sessions#destroy"
-  resources :membership, only: [:new, :create, :destroy]
+  resources :memberships, only: [:new, :create, :destroy]
   resources :beer_clubs, only: [:index, :new, :create, :destroy]
 end

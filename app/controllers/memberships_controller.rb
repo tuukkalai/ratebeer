@@ -1,4 +1,4 @@
-class MembersiphsController < ApplicationController
+class MembershipsController < ApplicationController
   def index
     @memberships = Membership.all
   end
@@ -8,7 +8,11 @@ class MembersiphsController < ApplicationController
 
   def new
     @membership = Membership.new
-    @users = User.all
+    if current_user
+      @beer_clubs = BeerClub.where.not(id: current_user.memberships)
+    else
+      @beer_clubs = BeerClub.all
+    end
   end
 
   def create
