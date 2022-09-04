@@ -7,6 +7,14 @@
     <%= user.username %> has made <%= pluralize(user.ratings.count, "rating") %>
     <%= ", average rating #{user.average_rating.round(2)}" unless user.average_rating.nil? %>
   </p>
+  <p>
+    <strong>Member of:</strong>
+    <ul>
+    <% user.memberships.each do |membership| %>
+      <li><%= link_to membership.beer_club.name, membership.beer_club %></li>
+    <% end %>
+    </ul>
+  </p>
   <h3>Ratings</h3>
   <ul>
   <% user.ratings.each do |rating| %>
