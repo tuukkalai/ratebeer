@@ -1,3 +1,4 @@
+<p style="color: green"><%= notice %></p>
 <h2>Join a club</h2>
 
 <%= form_for(@membership) do |f| %>
@@ -11,6 +12,12 @@
       </ul>
     </div>
   <% end %>
+  <% if @beer_clubs.nil? %>
+  <p>Log in to join a club</p>
+  <% elsif @beer_clubs.empty? %>
+  <p>You're already in all of the clubs!</p>
+  <% else %>
   Beer club: <%= f.select :beer_club_id, options_from_collection_for_select(@beer_clubs, :id, :to_s) %>
   <%= f.submit "Join" %>
+  <% end %>
 <% end %>
