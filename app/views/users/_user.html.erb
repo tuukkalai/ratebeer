@@ -15,10 +15,16 @@
     <% end %>
     </ul>
   </p>
-  <h3>Ratings</h3>
+  <p>
+  <strong>Ratings:</strong>
   <ul>
   <% user.ratings.each do |rating| %>
-    <li><%= render rating %> <%= link_to "Delete", rating, data: {"turbo-method": :delete} %></li>
+    <li><%= render rating %>
+    <% if user == current_user %>
+      <%= link_to "Delete", rating, data: {"turbo-method": :delete} %>
+    <% end %>
+    </li>
   <% end %>
   </ul>
+  </p>
 </div>
