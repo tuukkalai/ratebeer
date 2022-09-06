@@ -3,8 +3,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  validates :password, length: {minimum: 4},
-                       format: {with: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/}
+  validates :password, length: { minimum: 4 },
+                       format: { with: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/ }
 
   validates :username, uniqueness: true,
                        length: { minimum: 3,

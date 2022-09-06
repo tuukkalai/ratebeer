@@ -1,5 +1,5 @@
 class BeerClubsController < ApplicationController
-  before_action :set_beer_club, only: %i[ show edit update destroy ]
+  before_action :set_beer_club, only: %i[show edit update destroy]
 
   # GET /beer_clubs or /beer_clubs.json
   def index
@@ -8,7 +8,7 @@ class BeerClubsController < ApplicationController
 
   # GET /beer_clubs/1 or /beer_clubs/1.json
   def show
-    #@members = @beer_club.users
+    # @members = @beer_club.users
   end
 
   # GET /beer_clubs/new
@@ -59,13 +59,14 @@ class BeerClubsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_beer_club
-      @beer_club = BeerClub.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def beer_club_params
-      params.require(:beer_club).permit(:name, :founded, :city)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_beer_club
+    @beer_club = BeerClub.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def beer_club_params
+    params.require(:beer_club).permit(:name, :founded, :city)
+  end
 end

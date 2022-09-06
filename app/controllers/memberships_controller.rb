@@ -8,11 +8,9 @@ class MembershipsController < ApplicationController
 
   def new
     @membership = Membership.new
-    if current_user
-      @beer_clubs = BeerClub.where.not(id: current_user.beer_club_ids)
-    else
-      @beer_clubs = nil
-    end
+    @beer_clubs = if current_user
+                    BeerClub.where.not(id: current_user.beer_club_ids)
+                  end
   end
 
   def create
