@@ -12,6 +12,7 @@ gem "sprockets-rails"
 # Use sqlite3 as the database for dev and test envs
 group :development, :test do
   gem "sqlite3", "~> 1.4"
+  gem 'rspec-rails', '~> 6.0.0.rc1'
 end
 
 # Use postgresql as the database for production (Heroku)
