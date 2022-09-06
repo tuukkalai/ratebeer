@@ -52,6 +52,7 @@ class UsersController < ApplicationController
   def destroy
     return redirect_to @user unless @user == current_user
     @user.destroy
+    session[:user_id] = nil
 
     respond_to do |format|
       format.html { redirect_to users_url, notice: "User was successfully destroyed." }
