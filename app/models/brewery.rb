@@ -10,6 +10,6 @@ class Brewery < ApplicationRecord
   validate :brewery_not_established_in_future
 
   def brewery_not_established_in_future
-    return errors.add(:year, "can't be in the future") unless year >= Time.now.year
+    return errors.add(:year, "can't be in the future") unless year <= Time.now.year
   end
 end
