@@ -18,4 +18,10 @@ class User < ApplicationRecord
   def favorite_beer
     return ratings.order(score: :desc).limit(1).first.beer unless ratings.empty?
   end
+
+  def favorite_style
+    labels = ratings.group_by{|r| r.beer.style}.map{|s| s[0]}.to_a
+    scores = ratings.group_by{|r| r.beer.style}.map{|s| s[1].sum{|r| r.score}}
+    return labels[scores.each_with_index.max[1]] unless ratings.empty?
+  end
 end
