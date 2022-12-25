@@ -25,4 +25,9 @@ describe "Rating" do
     expect(beer1.ratings.count).to eq(1)
     expect(beer1.average_rating).to eq(15.0)
   end
+
+  it "page shows the amount of ratings correctly" do
+    create_multiple_ratings(beer1, 20, 1, 15, 9)
+    expect(page).to have_content "#{user.username} has made 4 ratings"
+  end
 end
